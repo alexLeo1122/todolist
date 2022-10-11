@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useContext } from "react";
+import { TasksContext } from "../App";
 
-
-export const AddTask = ({handleAddTask}) => {
+export const AddTask = () => {
+    
+    const {handleAddTask} = useContext(TasksContext);   
   const [inputText,setInputText] = useState('');
 
     return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useReducer,useContext } from 'react';
 import { TaskLists } from './components/TaskLists.component';
 
 import './App.css';
@@ -22,52 +22,81 @@ const initialTasks = [
     done: false
   }
 ];
-const  App= ()=> {
-  const [count,setCount] = useState(initialTasks.length);
-  const [tasks,setTasks] = useState(initialTasks);
-  // const [inputText,setInputText] = useState('');
+let count = 3;
 
-  console.log({tasks})
-  // const handleOnChange = (e) =>{
-  //   const text =e.target.value;
-  //   setInputText(text);
-  // }
-  const handleAddTask = (inputText) =>{   
-    if(inputText.length === 0) return;
-    setCount(count+1);
-    const newTask = {
-      id: count +1,
-      name: inputText,
-      done: false
-    };
-    setTasks((tasks)=>{
-     return [...tasks,
-                newTask]
-    });   
-    
+export const TasksContext = React.createContext();
+export const TasksArea = ({children,initialTasks}) => {
+    // const [Tasks, setTasks] = useState(initialTasks);   
+    const [tasks, dispatch] = useReducer(TasksReducer,initialTasks)
+    console.log(tasks);
+    const handleAddTask = (inputText) =>{   
+      if(inputText.length === 0) return;
+      count++;
+      dispatch({
+        type: "addTask",
+        newTask: {id: count,
+        name: inputText,
+        done: false}
+      });    
   }
-
   const handleEditTask = (newTask) =>{
-    setTasks(
-      tasks.map(oldTask=>{
-        if(oldTask.id===newTask.id){return newTask}
-        else{ return oldTask}
-      })
-    );
+      dispatch({
+        type: 'editTask',
+        newTask: newTask
+      });
+  }
+  const handleDelete = (e) => {
+      e.preventDefault();
+      dispatch({
+        type: "deleteTask",
+        id: e.target.id
+      });
+  }
+    return (
+      <TasksContext.Provider value={{tasks, dispatch,handleAddTask,handleEditTask,handleDelete}}>
+        {children}
+      </TasksContext.Provider>
+    )
+  }
+const  App= ()=> {
+  // console.log({tasks})
+
+  return (
+    <TasksArea initialTasks={initialTasks}>
+
+            <div className="App">
+                {/* add task field */}
+                <AddTask    />
+                <TaskLists />      
+            </div>
+    </TasksArea>
+
+  );
+}
+
+const TasksReducer = (tasks,action) =>{
+  switch (action.type) {
+    case "addTask":{
+    return   [...tasks, action.newTask];        
+    }
+    case "editTask":{
+      return  (
+                tasks.map(oldTask=>{
+                  if(oldTask.id===action.newTask.id){return action.newTask}
+                  else{ return oldTask}
+                })
+         );     
+      }   
+    
+    case "deleteTask":{     
+      return tasks.filter(task =>task.id !== Number(action.id));      
+    }
+    default:{
+      return tasks;
+    }
+
   }
 
-  const handleDelete = (e) => {
-    e.preventDefault();
-    const newTask = tasks.filter(task =>task.id !== Number(e.target.id));
-    setTasks([...newTask]);
-  }
-  return (
-    <div className="App">
-        {/* add task field */}
-        <AddTask     handleAddTask={handleAddTask}/>
-        <TaskLists onEditTask={handleEditTask} tasks={tasks} onDelete={handleDelete} />      
-    </div>
-  );
 }
 
 export default App;

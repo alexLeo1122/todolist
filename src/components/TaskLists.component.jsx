@@ -1,17 +1,19 @@
-import { useState } from "react"
+import { useState, useContext } from "react";
+import { TasksContext } from "../App";
 
 
 
 
 
-export const TaskLists = ({tasks, onDelete, onEditTask}) => {
+export const TaskLists = () => {
+    const {tasks,handleDelete} =  useContext(TasksContext);
     return (
         <>
             {   tasks.map((task) =>
                     (
                         <div key={task.id} id={task.id}>
-                            <TaskArea task={task} onEditTask={onEditTask}/>
-                            <button id={task.id} onClick={onDelete}>Delete</button>
+                            <TaskArea task={task}/>
+                            <button id={task.id} onClick={handleDelete}>Delete</button>
                         </div>
                     )
               )  } 
@@ -20,8 +22,10 @@ export const TaskLists = ({tasks, onDelete, onEditTask}) => {
     )
 }
 
-export const TaskArea = ({task, onEditTask}) =>{
+export const TaskArea = ({task}) =>{
     const [isEditing, setIsEditing] = useState(false);
+    const {handleEditTask} =  useContext(TasksContext);
+
     return (
         <>     
             { 
@@ -32,7 +36,7 @@ export const TaskArea = ({task, onEditTask}) =>{
                         checked={task.done} 
                         onChange={(e)=>
                             {
-                                onEditTask({
+                                handleEditTask({
                                     ...task,
                                     done: !task.done
                                     });
@@ -47,7 +51,7 @@ export const TaskArea = ({task, onEditTask}) =>{
                     <input type="text" value={task.name}
                         checked ={false}
                         onChange={(e) => {
-                            onEditTask({
+                            handleEditTask({
                             ...task,
                             name: e.target.value
                             });
@@ -56,7 +60,6 @@ export const TaskArea = ({task, onEditTask}) =>{
                     <button onClick={()=>setIsEditing(false)}>Save</button>
 
                 </>
-
                 
                 
                 }
