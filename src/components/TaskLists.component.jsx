@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { TasksContext } from "../App";
+import { TasksContext } from "./TasksContext.component";
 
 
 
