@@ -1,5 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 // import { fetchCount } from './counterAPI';
+export const fetchUrl ="https://63539e56ccce2f8c02f9cc80.mockapi.io/api/tdapp/v1/tasks"
+
+export const FetchTasksAsync = createAsyncThunk("tasks/Fetching",
+  async(fetchUrl)=>{    
+      let data = await fetch(fetchUrl);
+      let data2 = await data.json(); 
+      return data2;
+  }
+)
+
 
 const taskFormat = {
     text: "",
@@ -38,6 +48,16 @@ export const taskListsSlice = createSlice({
       // console.log({action})
       state.tasks.find(item=> item.id===action.payload.id)['done']=action.payload['done'];
   },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(FetchTasksAsync.pending, (state, action) => {
+      
+      return state ;
+    })
+    builder.addCase(FetchTasksAsync.fulfilled, (state, action) => {
+  state.tasks = action.payload;
+    })
   },
 
 });

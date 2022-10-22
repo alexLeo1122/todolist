@@ -1,6 +1,7 @@
 ###
 
-Todo List Made with + ReduxToolkit, MyOwnLogger, Redux Persist
+*Fetching data from MockAPI + Async =>Redux Thunk
+*Todo List Made with + ReduxToolkit, MyOwnLogger, Redux Persist
 
 ### App details
 
