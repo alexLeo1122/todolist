@@ -28,6 +28,9 @@ export const taskListsSlice = createSlice({
   name: 'taskLists',
   initialState,
   reducers: {
+    fetchTaskListsAsync: (state,action) =>{
+      state.tasks = action.payload
+    },
     addTask: (state,action) => {
       state.taskIdCount++; 
       const newTask ={id:state.taskIdCount, text:action.payload, done:false, isEditing:false}
@@ -50,19 +53,19 @@ export const taskListsSlice = createSlice({
   },
   },
 
-  extraReducers: (builder) => {
-    builder.addCase(FetchTasksAsync.pending, (state, action) => {
+  // extraReducers: (builder) => {
+  //   builder.addCase(fetchTaskLists.pending, (state, action) => {
       
-      return state ;
-    })
-    builder.addCase(FetchTasksAsync.fulfilled, (state, action) => {
-  state.tasks = action.payload;
-    })
-  },
+  //     return state ;
+  //   })
+  //   builder.addCase(FetchTasksAsync.fulfilled, (state, action) => {
+  // state.tasks = action.payload;
+  //   })
+  // },
 
 });
 
-export const { addTask,toggleTaskStatus, deleteTask, editTask, toggleTaskEditing } = taskListsSlice.actions;
+export const { addTask,toggleTaskStatus, deleteTask, editTask, toggleTaskEditing, fetchTaskListsAsync } = taskListsSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

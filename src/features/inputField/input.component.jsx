@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { onInputChange, selectInpValue } from './inputSlice';
-import { addTask } from '../task-lists/task-lists.slice';
+import { addTask, fetchTaskListsAsync } from '../task-lists/task-lists.slice';
 import { useState } from 'react';
 
 
@@ -22,6 +22,9 @@ export const InputField = () => {
     e.preventDefault();
     setInpValue(e.target.value);
   }
+  const fetchAsync = ()=>{
+    dispatch({type:"fetchTaskListsAsync"});
+  }
   return (
     <>        
         <form onSubmit={addTaskHandler}>
@@ -33,6 +36,7 @@ export const InputField = () => {
         <button>Add</button>
 
         </form>
+        <button onClick={fetchAsync}> Add Task async</button>
      
     </>
 

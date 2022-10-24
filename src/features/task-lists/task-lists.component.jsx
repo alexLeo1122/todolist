@@ -13,7 +13,9 @@ export const TaskLists = () => {
   const taskLists = useSelector(selectTaskLists);
 
   useEffect(()=>{
-    dispatch(FetchTasksAsync(fetchUrl));
+    console.log(">>TaskList/useEf started")
+    dispatch({type:"fetchTaskListsAsync"});
+    console.log(">>TaskList/useEf finished")
 
   },[]);
 
